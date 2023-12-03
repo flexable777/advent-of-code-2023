@@ -1,156 +1,16 @@
 fun main() {
 
     fun isPartNumber(input: List<String>, x: Int, y: Int): Boolean {
-
-        //all ups
-        if (x > 0) {
-            //check up left
-            if (y > 0) {
-                val value = input[x - 1][y - 1]
-                if (!value.isDigit() && value != '.') {
-                    return true
-                }
-            }
-
-            //up
-            if (true) {
-                val value = input[x - 1][y]
-                if (!value.isDigit() && value != '.') {
-                    return true
-                }
-            }
-
-            //check up right
-            if (y < input.first().length - 1) {
-                val value = input[x - 1][y + 1]
-                if (!value.isDigit() && value != '.') {
-                    return true
-                }
-            }
-        }
-
-        //check left
-        if (y > 0) {
-            val value = input[x][y - 1]
-            if (!value.isDigit() && value != '.') {
-                return true
-            }
-        }
-
-        //check right
-        if (y <= input.first().length - 2) {
-            val value = input[x][y + 1]
-            if (!value.isDigit() && value != '.') {
-                return true
-            }
-        }
-
-        //all downs
-
-        if (x < input.size - 1) {
-            //check down left
-            if (y > 0) {
-                val value = input[x + 1][y - 1]
-                if (!value.isDigit() && value != '.') {
-                    return true
-                }
-            }
-
-            //check down
-            if (true) {
-                val value = input[x + 1][y]
-                if (!value.isDigit() && value != '.') {
-                    return true
-                }
-            }
-
-            //check down right
-            if (y <= input.first().length - 2) {
-                val value = input[x + 1][y + 1]
-                if (!value.isDigit() && value != '.') {
-                    return true
-                }
-            }
-        }
-
-        return false
+        return getNeighbours(input = input, x = x, y = y).any { !it.second.isDigit() && it.second != '.' }
     }
 
     fun isPartNumberWithStarHit(input: List<String>, x: Int, y: Int): Pair<Pair<Int, Int>, Boolean> {
-
-        //all ups
-        if (x > 0) {
-            //check up left
-            if (y > 0) {
-                val value = input[x - 1][y - 1]
-                if (value == '*') {
-                    return (x - 1) to (y - 1) to true
-                }
-            }
-
-            //up
-            if (true) {
-                val value = input[x - 1][y]
-                if (value == '*') {
-                    return (x - 1) to y to true
-                }
-            }
-
-            //check up right
-            if (y < input.first().length - 1) {
-                val value = input[x - 1][y + 1]
-                if (value == '*') {
-                    return (x - 1) to (y + 1) to true
-                }
-            }
+        val toReturn = getNeighbours(input = input, x = x, y = y).find { it.second == '*' }
+        return if (toReturn == null) {
+            (x to y) to false
+        } else {
+            toReturn.first to true
         }
-
-        //check left
-        if (y > 0) {
-            val value = input[x][y - 1]
-            if (value == '*') {
-                return (x) to (y - 1) to true
-            }
-        }
-
-        //check right
-        if (y <= input.first().length - 2) {
-            val value = input[x][y + 1]
-            if (value == '*') {
-                return (x) to (y + 1) to true
-            }
-        }
-
-        //all downs
-
-        if (x < input.size - 1) {
-            //check down left
-            if (y > 0) {
-                val value = input[x + 1][y - 1]
-                if (value == '*') {
-                    return (x + 1) to (y - 1) to true
-                }
-            }
-
-            //check down
-            if (true) {
-                val value = input[x + 1][y]
-                if (value == '*') {
-                    return (x + 1) to (y) to true
-                }
-            }
-
-            //check down right
-            if (y <= input.first().length - 2) {
-                val value = input[x + 1][y + 1]
-                if (value == '*') {
-                    return (x + 1) to (y + 1) to true
-                }
-            }
-        }
-
-        //Don't care
-        return (x) to (y) to false
     }
 
     fun part1(input: List<String>): Long {
