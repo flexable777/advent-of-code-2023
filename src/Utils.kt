@@ -26,49 +26,92 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
  */
 fun Any?.println(part: Int) = println("Part $part: $this")
 
-fun getNeighbours(input: List<String>, x: Int, y: Int): List<Pair<Pair<Int, Int>, Char>> {
-    val n = mutableListOf<Pair<Pair<Int, Int>, Char>>()
+enum class Direction {
+    NW, N, NE, W, E, SW, S, SE
+}
+
+data class Tile(
+    val index: Pair<Int, Int>,
+    val value: Char,
+    val relativePosition: Direction?,
+
+)
+
+fun getNeighbours(input: List<String>, x: Int, y: Int, includeDiagonal: Boolean = true): List<Tile> {
+    val n = mutableListOf<Tile>()
 
     //all ups
     if (x > 0) {
         //check up left
-        if (y > 0) {
-            n += (x - 1) to (y - 1) to (input[x - 1][y - 1])
+        if (includeDiagonal && y > 0) {
+            n += Tile(
+                index = (x - 1) to (y - 1),
+                value = (input[x - 1][y - 1]),
+                relativePosition = Direction.NW,
+            )
         }
 
         //up
-        n += (x - 1) to (y) to (input[x - 1][y])
+        n += Tile(
+            index = (x - 1) to (y),
+            value = (input[x - 1][y]),
+            relativePosition = Direction.N,
+        )
 
         //check up right
-        if (y < input.first().length - 1) {
-            n += (x - 1) to (y + 1) to (input[x - 1][y + 1])
+        if (includeDiagonal && y < input.first().length - 1) {
+            n += Tile(
+                index = (x - 1) to (y + 1),
+                value = (input[x - 1][y + 1]),
+                relativePosition = Direction.NE,
+            )
         }
     }
 
     //check left
     if (y > 0) {
-        n += (x) to (y - 1) to (input[x][y - 1])
+        n += Tile(
+            index = (x) to (y - 1),
+            value = (input[x][y - 1]),
+            relativePosition = Direction.W,
+        )
     }
 
     //check right
     if (y <= input.first().length - 2) {
-        n += (x) to (y + 1) to (input[x][y + 1])
+        n += Tile(
+            index = (x) to (y + 1),
+            value = (input[x][y + 1]),
+            relativePosition = Direction.E,
+        )
     }
 
     //all downs
 
     if (x < input.size - 1) {
         //check down left
-        if (y > 0) {
-            n += (x + 1) to (y - 1) to (input[x + 1][y - 1])
+        if (includeDiagonal && y > 0) {
+            n += Tile(
+                index = (x + 1) to (y - 1),
+                value = (input[x + 1][y - 1]),
+                relativePosition = Direction.SW,
+            )
         }
 
         //check down
-        n += (x + 1) to (y) to (input[x + 1][y])
+        n += Tile(
+            index = (x + 1) to (y),
+            value = (input[x + 1][y]),
+            relativePosition = Direction.S,
+        )
 
         //check down right
-        if (y <= input.first().length - 2) {
-            n += (x + 1) to (y + 1) to (input[x + 1][y + 1])
+        if (includeDiagonal && y <= input.first().length - 2) {
+            n += Tile(
+                index = (x + 1) to (y + 1),
+                value = (input[x + 1][y + 1]),
+                relativePosition = Direction.SE,
+            )
         }
     }
 

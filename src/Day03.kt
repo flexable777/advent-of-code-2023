@@ -1,15 +1,15 @@
 fun main() {
 
     fun isPartNumber(input: List<String>, x: Int, y: Int): Boolean {
-        return getNeighbours(input = input, x = x, y = y).any { !it.second.isDigit() && it.second != '.' }
+        return getNeighbours(input = input, x = x, y = y).any { !it.value.isDigit() && it.value != '.' }
     }
 
     fun isPartNumberWithStarHit(input: List<String>, x: Int, y: Int): Pair<Pair<Int, Int>, Boolean> {
-        val toReturn = getNeighbours(input = input, x = x, y = y).find { it.second == '*' }
+        val toReturn = getNeighbours(input = input, x = x, y = y).find { it.value == '*' }
         return if (toReturn == null) {
             (x to y) to false
         } else {
-            toReturn.first to true
+            toReturn.index to true
         }
     }
 
